@@ -1,0 +1,115 @@
+{% extends "layout.html"%}
+{% block content %}
+
+<div>
+    <br>
+<form method="POST" action="" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+    </div>
+    <div>
+    {{ form.subject.label()}}
+        {% if form.subject.errors%}
+        {{ form.subject() }}
+        {% for error in form.subject.errors %}
+            <div>
+            {{ error }}
+            </div>
+        {% endfor %}
+        {% else %}
+        {{form.subject()}}
+        {% endif %}
+    </div>
+
+    <div>
+        {{ form.sem.label() }}
+    <select name=sem>
+    {% for sem in [1,2,3,4,5,6,7,8] %}
+    <option value= "{{sem}}" SELECTED>{{sem}}</option>"
+    {% endfor %}
+    </select>
+    </div>
+   <div>
+    {{ form.batch.label()}}
+        {% if form.batch.errors%}
+        {{ form.batch() }}
+        {% for error in form.batch.errors %}
+            <div>
+            {{ error }}
+            </div>
+        {% endfor %}
+        {% else %}
+        {{form.batch()}}
+        {% endif %}
+    </div>
+       <div>
+    {{ form.faculty_name.label()}}
+        {% if form.faculty_name.errors%}
+        {{ form.faculty_name() }}
+        {% for error in form.faculty_name.errors %}
+            <div>
+            {{ error }}
+            </div>
+        {% endfor %}
+        {% else %}
+        {{form.faculty_name()}}
+        {% endif %}
+         </div>
+
+     <div>
+    {{ form.start_time.label()}}
+        {% if form.start_time.errors%}
+        {{ form.start_time() }}
+        {% for error in form.start_time.errors %}
+            <div>
+            {{ error }}
+            </div>
+        {% endfor %}
+        {% else %}
+        {{form.start_time()}}
+        {% endif %}
+         </div>
+
+     <div>
+    {{ form.end_time.label()}}
+        {% if form.end_time.errors%}
+        {{ form.end_time() }}
+        {% for error in form.end_time.errors %}
+            <div>
+            {{ error }}
+            </div>
+        {% endfor %}
+        {% else %}
+        {{form.end_time()}}
+        {% endif %}
+         </div>
+
+    <div>
+        {{ form.slot.label() }}
+    <select name=slot>
+    {% for slot in [1,2,3,4,5] %}
+        <option value= "{{slot}}" SELECTED>{{slot}}</option>"
+    {% endfor %}
+    </select>
+    </div>
+
+
+    <tr></tr>
+
+    <div>
+    <br>
+        <div>
+    {{form.submit()}}
+        </div>
+</form>
+</div>
+{% endblock content %}

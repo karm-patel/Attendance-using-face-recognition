@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="table-responsive">
+    <br>
+     <table class="table table-hover table-striped">
+         <thead class="thead-dark">
+         <th>Sr. No</th>
+         <th>Name</th>
+         <th>Enrollment</th>
+         <th>Subject</th>
+         <th>Batch</th>
+         <th>Lecture Slot</th>
+         <th>timestamp</th>
+         </thead>
+         <tr></tr>
+         {% set ind = 1 %}
+         {% for each in data %}
+             <td>{{ ind }}</td>
+             <td>{{ each["name"] }}</td>
+             <td>{{ each["enrollment"] }}</td>
+             <td>{{ each["subject"] }}</td>
+             <td>{{ each["batch"] }}</td>
+             <td>{{ each["slot"] }}</td>
+             <td>{{ each["timestamp"] }}</td>
+             {% set ind = ind + 1 %}
+             <tr></tr>
+         {% endfor %}
+     </table>
+ </div>
+{% endblock content %}
