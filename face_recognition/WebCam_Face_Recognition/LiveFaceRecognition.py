@@ -4,7 +4,7 @@ import traceback
 from imutils.video import VideoStream
 from flask_sqlalchemy import SQLAlchemy
 from face_recognition.database import Attendence,Student,TimeTable
-from face_recognition import db
+from face_recognition import db,app
 from face_recognition.WebCam_Face_Recognition import modules
 from datetime import datetime
 import numpy as np
@@ -29,7 +29,8 @@ def camera():
 	db.create_all()
 
 	#pretrained facenet model to gate embeddings of face
-	facenet_model = modules.load_facenet_model()
+	facenet_model = app.config['FACENET_MODEL']
+	#facenet_model = modules.load_facenet_model()
 
 	#pretrained deep learning model for face detection
 	dnn_model = modules.load_caffe_model()
@@ -44,7 +45,7 @@ def camera():
 	pre_confidence = 0.5
 
 	#ip webcam
-	url = "http://192.168.0.102:8080/video"
+	url = "http://192.168.0.104:8080/video"
 	#url = "http://192.168.43.1:8080/video"
 
 	# load our serialized model from disk
@@ -56,10 +57,21 @@ def camera():
 
 	#Capture from Phone's Camera
 	vs = cv2.VideoCapture(url)
+	if not vs:
+		print("camera can not capture frame!")
+		return 0
 
-	#time.sleep(2.0)
-
+	#store already presnt students
+	slot = modules.get_slot()
+	timetable_id = TimeTable.query.filter_by(slot=slot).first().id
+	today_data = Attendence.query.filter_by(timetable_id = timetable_id, date = str(datetime.today().date()))
 	attendence_taken = []
+	if today_data:
+		for each in today_data.all():
+			student_id = each.student_id
+			student_name = Student.query.filter_by(id=student_id).first().name
+			attendence_taken.append(student_name)
+	print(attendence_taken)
 	# loop over the frames from the video stream
 	while True:
 		# grab the frame from the threaded video stream and resize it
@@ -193,4 +205,7 @@ def camera():
 
 	#for pc camera
 	#vs.stop()
+
+	vs.release()
+	print("camera stopped")
 	#& 0xFF
