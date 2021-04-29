@@ -45,7 +45,7 @@ def camera():
 	pre_confidence = 0.5
 
 	#ip webcam
-	url = "http://192.168.0.104:8080/video"
+	url = "http://192.168.0.101:8080/video"
 	#url = "http://192.168.43.1:8080/video"
 
 	# load our serialized model from disk
