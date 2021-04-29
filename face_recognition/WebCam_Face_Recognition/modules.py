@@ -1,5 +1,6 @@
 import os
 import pickle
+from face_recognition import app
 from pathlib import Path
 import numpy as np
 import cv2
@@ -14,6 +15,7 @@ from sklearn.preprocessing import Normalizer
 from sklearn.svm import SVC
 from datetime import datetime
 import os
+import tensorflow as tf
 import psutil
 
 path = "./face_recognition/8_5-Dataset"
@@ -24,9 +26,11 @@ npz_path = "./face_recognition/WebCam_Face_Recognition/npz_data/"
 # model_path = "./WebCam_Face_Recognition/models/"
 # npz_path = "./WebCam_Face_Recognition/npz_data/"
 
+
 def load_facenet_model():
     try:
         facenet_model = load_model(model_path+'facenet_keras.h5')
+        facenet_model.keras_model._make_predict_function()
     except:
         new_model_path = os.path.join(os.getcwd(),model_path[2:])
         print(new_model_path)
@@ -125,7 +129,9 @@ def get_embeddings(model, face_pixels):
     # print("before:",face_pixels.shape)
     samples = expand_dims(face_pixels, axis=0)
     # print("after:",samples.shape)
-    embs = model.predict(samples)
+    graph = app.config['GRAPH']
+    with graph.as_default():
+        embs = model.predict(samples)
     #print(embs[0].shape)
     # print(embs[0])
     return embs[0]
